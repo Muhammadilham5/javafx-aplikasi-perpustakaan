@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.VBox?>
+
+<AnchorPane id="AnchorPane" prefHeight="400.0" prefWidth="700.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="aplikasiperpustakaan.Controller">
+   <children>
+      <Pane prefHeight="400.0" prefWidth="100.0" style="-fx-background-color: #012a4a;">
+         <children>
+            <VBox layoutY="74.0" prefHeight="252.0" prefWidth="100.0">
+               <children>
+                  <Pane fx:id="MenuAkun" onMouseClicked="#AktifMenuAkun" prefHeight="67.0" prefWidth="95.0" style="-fx-background-color: #012a4a;">
+                     <children>
+                        <ImageView layoutX="36.0" layoutY="22.0">
+                           <image>
+                              <Image url="@../img/icons8_user_24px_3.png" />
+                           </image>
+                        </ImageView>
+                     </children>
+                  </Pane>
+                  <Pane fx:id="MenuTambah" onMouseClicked="#AktifMenuTambah" prefHeight="67.0" prefWidth="95.0" style="-fx-background-color: #012a4a;">
+                     <children>
+                        <ImageView layoutX="37.0" layoutY="18.0">
+                           <image>
+                              <Image url="@../img/icons8_add_24px_4.png" />
+                           </image>
+                        </ImageView>
+                     </children>
+                  </Pane>
+                  <Pane fx:id="MenuBuku" onMouseClicked="#AktifMenuBuku" prefHeight="67.0" prefWidth="95.0" style="-fx-background-color: #012a4a;">
+                     <children>
+                        <ImageView layoutX="38.0" layoutY="20.0">
+                           <image>
+                              <Image url="@../img/icons8_add_book_24px_3.png" />
+                           </image>
+                        </ImageView>
+                     </children>
+                  </Pane>
+                  <Pane fx:id="MenuExit" onMouseClicked="#exit" prefHeight="67.0" prefWidth="95.0" style="-fx-background-color: #012a4a;">
+                     <children>
+                        <ImageView layoutX="37.0" layoutY="19.0">
+                           <image>
+                              <Image url="@../img/icons8_exit_24px_6.png" />
+                           </image>
+                        </ImageView>
+                     </children>
+                  </Pane>
+               </children>
+            </VBox>
+         </children>
+      </Pane>
+   </children>
+</AnchorPane>
