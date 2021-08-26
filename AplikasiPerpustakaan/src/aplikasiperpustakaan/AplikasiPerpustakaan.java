@@ -23,7 +23,7 @@ public class AplikasiPerpustakaan extends Application {
         Parent root = FXMLLoader.load(getClass().getResource("TampilanUtama.fxml"));
         
         stage.initStyle(StageStyle.UNDECORATED);
-        Scene scene = new Scene(root,700,400);
+        Scene scene = new Scene(root,800,400);
         stage.setTitle("perpustakaan");
         stage.setScene(scene);
         stage.show();
@@ -37,3 +37,4 @@ public class AplikasiPerpustakaan extends Application {
     }
     
 }
+
