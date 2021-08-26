@@ -93,7 +93,7 @@ public class Controller implements Initializable {
     
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        showpinjam
+        showpinjam();
     }    
     
     public Connection getConnection() {
