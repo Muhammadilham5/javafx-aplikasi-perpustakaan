@@ -19,7 +19,10 @@ import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.geometry.Insets;
+import javafx.scene.chart.LineChart;
+import javafx.scene.chart.XYChart;
 import javafx.scene.control.Button;
+import javafx.scene.control.DatePicker;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
@@ -30,6 +33,7 @@ import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.CornerRadii;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
+import javafx.scene.text.Text;
 
 /**
  *
@@ -37,20 +41,25 @@ import javafx.scene.paint.Color;
  */
 public class Controller implements Initializable {
     
-    //FXML//    
+    //FXML//
     @FXML private Pane MenuAkun;
     @FXML private Pane MenuTambah;
     @FXML private Pane MenuBuku;
     @FXML private Pane MenuExit;
     
+    @FXML private Pane home;
     @FXML private Pane tambah;
     @FXML private Pane buku;
+    
+    @FXML private Text stbuku;
+    @FXML private Text stpinjam;
+    @FXML private Text stkembali;
     
     @FXML private TextField tfid;
     @FXML private TextField tfnama;
     @FXML private TextField tfkode1;
-    @FXML private TextField tfpinjam;
-    @FXML private TextField tfkembali;
+    @FXML private DatePicker tfpinjam;
+    @FXML private DatePicker tfkembali;
     @FXML private TextField tfket;
     
     @FXML private TextField tfkode2;
@@ -70,8 +79,9 @@ public class Controller implements Initializable {
     @FXML private TableColumn<Pinjam, Integer> colId;
     @FXML private TableColumn<Pinjam, String> colNama;
     @FXML private TableColumn<Pinjam, Integer> colKode1;
-    @FXML private TableColumn<Pinjam, Integer> colTglPinjam;
-    @FXML private TableColumn<Pinjam, Integer> colTglKembali;
+    @FXML private TableColumn<Pinjam, String> colJudul1;
+    @FXML private TableColumn<Pinjam, String> colTglPinjam;
+    @FXML private TableColumn<Pinjam, String> colTglKembali;
     @FXML private TableColumn<Pinjam, String> colKet;
     
     @FXML private TableView<Buku> tbvbuku;
@@ -79,6 +89,8 @@ public class Controller implements Initializable {
     @FXML private TableColumn<Buku, String> colJudul;
     @FXML private TableColumn<Buku, String> colPengarang;
     @FXML private TableColumn<Buku, Integer> colThnTerbit;
+    
+    @FXML private LineChart<String ,Number> Linechart;
    
     @FXML
     void AktifMenuAkun(MouseEvent event) {
@@ -86,6 +98,9 @@ public class Controller implements Initializable {
         MenuTambah.setBackground(new Background(new BackgroundFill(Color.TRANSPARENT, CornerRadii.EMPTY, Insets.EMPTY)));
         MenuBuku.setBackground(new Background(new BackgroundFill(Color.TRANSPARENT, CornerRadii.EMPTY, Insets.EMPTY)));
         MenuExit.setBackground(new Background(new BackgroundFill(Color.TRANSPARENT, CornerRadii.EMPTY, Insets.EMPTY)));
+        home.setVisible(true);
+        tambah.setVisible(false);
+        buku.setVisible(false);
     }
     
     @FXML
@@ -94,6 +109,7 @@ public class Controller implements Initializable {
         MenuTambah.setBackground(new Background(new BackgroundFill(Color.valueOf("#013a63"), CornerRadii.EMPTY, Insets.EMPTY)));
         MenuBuku.setBackground(new Background(new BackgroundFill(Color.TRANSPARENT, CornerRadii.EMPTY, Insets.EMPTY)));
         MenuExit.setBackground(new Background(new BackgroundFill(Color.TRANSPARENT, CornerRadii.EMPTY, Insets.EMPTY)));
+        home.setVisible(false);
         tambah.setVisible(true);
         buku.setVisible(false);
     }
@@ -104,6 +120,7 @@ public class Controller implements Initializable {
         MenuTambah.setBackground(new Background(new BackgroundFill(Color.TRANSPARENT, CornerRadii.EMPTY, Insets.EMPTY)));
         MenuBuku.setBackground(new Background(new BackgroundFill(Color.valueOf("#013a63"), CornerRadii.EMPTY, Insets.EMPTY)));
         MenuExit.setBackground(new Background(new BackgroundFill(Color.TRANSPARENT, CornerRadii.EMPTY, Insets.EMPTY)));
+        home.setVisible(false);
         tambah.setVisible(false);
         buku.setVisible(true);
     }
@@ -116,6 +133,10 @@ public class Controller implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         showpinjam();
+        showbuku();
+        chart();
+        chart1();
+        tampilanjumlah();
     }
     
     public Connection getConnection() {
@@ -134,7 +155,8 @@ public class Controller implements Initializable {
     public ObservableList<Pinjam> getPinjamList(){
     	ObservableList<Pinjam> pinjamList = FXCollections.observableArrayList();
     	Connection connection = getConnection();
-    	String query = "SELECT * FROM pinjam ";
+    	String query;
+        query = "SELECT `id`, `nama`, `pinjam`.`kode`, `judul`, `tglpinjam`, `tglkembali`, `ket` FROM `pinjam` INNER JOIN `buku` ON `pinjam`.`kode` = `buku`.`kode`;";
     	Statement st;
     	ResultSet rs;
     	
@@ -143,7 +165,7 @@ public class Controller implements Initializable {
 			rs = st.executeQuery(query);
 			Pinjam pinjam;
 			while(rs.next()) {
-				pinjam = new Pinjam(rs.getInt("id"),rs.getString("nama"),rs.getInt("kode1"),rs.getInt("tglpinjam"),rs.getInt("tglkembali"),rs.getString("ket"));
+				pinjam = new Pinjam(rs.getInt("id"),rs.getString("nama"),rs.getInt("kode"),rs.getString("judul"),rs.getString("tglpinjam"),rs.getString("tglkembali"),rs.getString("ket"));
 				pinjamList.add(pinjam);
 				}
 		} catch (SQLException e) {
@@ -152,29 +174,30 @@ public class Controller implements Initializable {
     	return pinjamList;
     }
     
+    // I had to change ArrayList to ObservableList I didn't find another option to do this but this works :)
     public void showpinjam() {
     	ObservableList<Pinjam> list = getPinjamList();
     	
     	colId.setCellValueFactory(new PropertyValueFactory<Pinjam,Integer>("id"));
     	colNama.setCellValueFactory(new PropertyValueFactory<Pinjam,String>("nama"));
-    	colKode1.setCellValueFactory(new PropertyValueFactory<Pinjam,Integer>("kode1"));
-    	colTglPinjam.setCellValueFactory(new PropertyValueFactory<Pinjam,Integer>("tglpinjam"));
-    	colTglKembali.setCellValueFactory(new PropertyValueFactory<Pinjam,Integer>("tglkembali"));
+    	colKode1.setCellValueFactory(new PropertyValueFactory<Pinjam,Integer>("kode"));
+        colJudul1.setCellValueFactory(new PropertyValueFactory<Pinjam,String>("judul"));
+    	colTglPinjam.setCellValueFactory(new PropertyValueFactory<Pinjam,String>("tglpinjam"));
+    	colTglKembali.setCellValueFactory(new PropertyValueFactory<Pinjam,String>("tglkembali"));
         colKet.setCellValueFactory(new PropertyValueFactory<Pinjam,String>("ket"));
-    	
     	tbvpinjam.setItems(list);
     }
     
     @FXML
     private void btnAdd1() {
-    	String query = "INSERT INTO pinjam VALUES('"+tfid.getText()+"','"+tfnama.getText()+"','"+tfkode1.getText()+"','"+tfpinjam.getText()+"','"+tfkembali.getText()+"','"+tfket.getText()+"')";
+    	String query = "INSERT INTO pinjam VALUES('"+tfid.getText()+"','"+tfnama.getText()+"','"+tfkode1.getText()+"','"+tfpinjam.getValue()+"','"+tfkembali.getValue()+"','"+tfket.getText()+"')";
     	executeQuery(query);
     	showpinjam();
     }
     
     @FXML 
     private void btnEdit1() {
-        String query = "UPDATE pinjam SET nama='"+tfnama.getText()+"',kode1='"+tfkode1.getText()+"',tglpinjam='"+tfpinjam.getText()+"',tglkembali='"+tfkembali.getText()+"',ket='"+tfket.getText()+"' WHERE id='"+tfid.getText()+"'";
+        String query = "UPDATE pinjam SET nama='"+tfnama.getText()+"',kode='"+tfkode1.getText()+"',tglpinjam='"+tfpinjam.getValue()+"',tglkembali='"+tfkembali.getValue()+"',ket='"+tfket.getText()+"' WHERE id='"+tfid.getText()+"'";
         executeQuery(query);
 	showpinjam();
     }
@@ -191,9 +214,7 @@ public class Controller implements Initializable {
         Pinjam pinjam = tbvpinjam.getSelectionModel().getSelectedItem();
         tfid.setText(""+ pinjam.getId());
         tfnama.setText(""+ pinjam.getNama());
-        tfkode1.setText(""+ pinjam.getKode1());
-        tfpinjam.setText(""+ pinjam.getTglpinjam());
-        tfkembali.setText(""+ pinjam.getTglkembali());
+        tfkode1.setText(""+ pinjam.getKode());
         tfket.setText(""+ pinjam.getKet());
         
     }
@@ -222,7 +243,7 @@ public class Controller implements Initializable {
 			rs = st.executeQuery(query);
 			Buku buku;
 			while(rs.next()) {
-				buku = new Buku(rs.getInt("kode2"),rs.getString("judul"),rs.getString("pengarang"),rs.getInt("thnterbit"));
+				buku = new Buku(rs.getInt("kode"),rs.getString("judul"),rs.getString("pengarang"),rs.getInt("thnterbit"));
 				bukuList.add(buku);
 				}
 		} catch (SQLException e) {
@@ -234,7 +255,7 @@ public class Controller implements Initializable {
     public void showbuku() {
     	ObservableList<Buku> list = getBukuList();
     	
-    	colKode2.setCellValueFactory(new PropertyValueFactory<Buku,Integer>("kode2"));
+    	colKode2.setCellValueFactory(new PropertyValueFactory<Buku,Integer>("kode"));
     	colJudul.setCellValueFactory(new PropertyValueFactory<Buku,String>("judul"));
     	colPengarang.setCellValueFactory(new PropertyValueFactory<Buku,String>("pengarang"));
     	colThnTerbit.setCellValueFactory(new PropertyValueFactory<Buku,Integer>("thnterbit"));
@@ -251,14 +272,14 @@ public class Controller implements Initializable {
     
     @FXML 
     private void btnEdit2() {
-        String query = "UPDATE buku SET judul='"+tfjudul.getText()+"',pengarang='"+tfpengarang.getText()+"',thnterbit='"+tfthnterbit.getText()+"' WHERE kode2='"+tfkode2.getText()+"'";
+        String query = "UPDATE buku SET judul='"+tfjudul.getText()+"',pengarang='"+tfpengarang.getText()+"',thnterbit='"+tfthnterbit.getText()+"' WHERE kode='"+tfkode2.getText()+"'";
         executeQuery(query);
 	showbuku();
     }
     
     @FXML
     private void btnDelete2() {
-    	String query = "DELETE FROM buku WHERE kode2="+tfkode2.getText()+"";
+    	String query = "DELETE FROM buku WHERE kode="+tfkode2.getText()+"";
     	executeQuery(query);
     	showbuku();
     }
@@ -266,9 +287,70 @@ public class Controller implements Initializable {
     @FXML
     void Select2(MouseEvent event) {
         Buku buku = tbvbuku.getSelectionModel().getSelectedItem();
-        tfkode2.setText(""+ buku.getKode2());
+        tfkode2.setText(""+ buku.getKode());
         tfjudul.setText(""+ buku.getJudul());
         tfpengarang.setText(""+ buku.getPengarang());
         tfthnterbit.setText(""+ buku.getThnterbit());
+    }
+    
+    private void chart(){
+        String query = "SELECT `tglpinjam`, COUNT(`tglpinjam`) AS jumlah FROM pinjam GROUP BY `tglpinjam`;";
+        XYChart.Series<String ,Number> series = new XYChart.Series<>();
+        try{
+            Connection connection = getConnection();
+            ResultSet rs = connection.createStatement().executeQuery(query);
+            while(rs.next()){
+                series.getData().add(new XYChart.Data<>(rs.getString(1),rs.getInt(2)));
+                series.setName("pinjam");
+            }Linechart.getData().add(series); 
+        }catch(SQLException e){
+            
+        }
+    }
+    private void chart1(){
+        String query = "SELECT `tglkembali`, COUNT(`tglkembali`) AS jumlah FROM pinjam GROUP BY `tglkembali`;";
+        XYChart.Series<String ,Number> series = new XYChart.Series<>();
+        try{
+            Connection connection = getConnection();
+            ResultSet rs = connection.createStatement().executeQuery(query);
+            while(rs.next()){
+                series.getData().add(new XYChart.Data<>(rs.getString(1),rs.getInt(2)));
+                series.setName("kembali");
+            }Linechart.getData().add(series); 
+        }catch(SQLException e){
+            
+        }
+    }
+    private void tampilanjumlah(){
+        //tampilan jumlah buku
+        try{
+            String query ="SELECT COUNT(`kode`) AS jumlah FROM pinjam; ";
+            Connection connection = getConnection();
+            ResultSet rs = connection.createStatement().executeQuery(query);
+            while(rs.next()){
+                stbuku.setText(rs.getString(1));
+            }
+        }catch(SQLException e){  
+        }
+        //tampilan jumlah dipinjam
+        try{
+            String query ="SELECT COUNT(`ket`) AS jumlah FROM pinjam WHERE ket = 'dipinjam';";
+            Connection connection = getConnection();
+            ResultSet rs = connection.createStatement().executeQuery(query);
+            while(rs.next()){
+                stpinjam.setText(rs.getString(1));
+            }
+        }catch(SQLException e){  
+        }
+        //tampilan jumlah dikembalikan
+        try{
+            String query ="SELECT COUNT(`ket`) AS jumlah FROM pinjam WHERE ket = 'kembalikan';";
+            Connection connection = getConnection();
+            ResultSet rs = connection.createStatement().executeQuery(query);
+            while(rs.next()){
+                stkembali.setText(rs.getString(1));
+            }
+        }catch(SQLException e){  
+        }
     }
 }
