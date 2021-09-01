@@ -5,6 +5,11 @@
  */
 package aplikasiperpustakaan;
 
+import java.text.SimpleDateFormat;
+import javafx.scene.control.DateCell;
+import javafx.scene.control.DatePicker;
+import javafx.util.Callback;
+
 /**
  *
  * @author ASUS
@@ -13,14 +18,16 @@ public class Pinjam {
     private int id;
     private String nama;
     private int kode;
-    private int tglpinjam;
-    private int tglkembali;
+    private String judul;
+    private String tglpinjam;
+    private String tglkembali;
     private String ket;
 
-    public Pinjam(int id, String nama, int kode, int tglpinjam, int tglkembali, String ket) {
+    public Pinjam(int id, String nama, int kode, String judul, String tglpinjam, String tglkembali, String ket) {
         this.id = id;
         this.nama = nama;
         this.kode = kode;
+        this.judul = judul;
         this.tglpinjam = tglpinjam;
         this.tglkembali = tglkembali;
         this.ket = ket;
@@ -40,18 +47,20 @@ public class Pinjam {
     public int getKode() {
         return kode;
     }
+    
+    public String getJudul() {
+        return judul;
+    }
 
-    public int getTglpinjam() {
+    public String getTglpinjam() {
         return tglpinjam;
     }
 
-    public int getTglkembali() {
+    public String getTglkembali() {
         return tglkembali;
     }
 
     public String getKet() {
         return ket;
     }
-    
-    
 }
