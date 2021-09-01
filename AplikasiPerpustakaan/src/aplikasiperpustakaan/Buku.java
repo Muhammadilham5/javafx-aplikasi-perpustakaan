@@ -10,20 +10,20 @@ package aplikasiperpustakaan;
  * @author ASUS
  */
 public class Buku {
-    private int kode2;
+    private int kode;
     private String judul;
     private String pengarang;
     private int thnterbit;
 
-    public Buku(int kode2, String judul, String pengarang, int thnterbit) {
-        this.kode2 = kode2;
+    public Buku(int kode, String judul, String pengarang, int thnterbit) {
+        this.kode = kode;
         this.judul = judul;
         this.pengarang = pengarang;
         this.thnterbit = thnterbit;
     }
 
-    public int getKode2() {
-        return kode2;
+    public int getKode() {
+        return kode;
     }
 
     public String getJudul() {
