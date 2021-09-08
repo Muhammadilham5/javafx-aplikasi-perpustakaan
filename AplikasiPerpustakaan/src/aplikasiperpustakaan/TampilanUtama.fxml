@@ -79,16 +79,31 @@
                      <children>
                         <Text fx:id="stbuku" fill="WHITE" layoutX="163.0" layoutY="79.0" strokeType="OUTSIDE" strokeWidth="0.0" style="-fx-font-size: 28;" text="0" />
                         <Text fill="WHITE" layoutX="14.0" layoutY="36.0" strokeType="OUTSIDE" strokeWidth="0.0" style="-fx-font-size: 24;" text="Jumlah Buku" />
+                        <ImageView layoutX="14.0" layoutY="42.0">
+                           <image>
+                              <Image url="@../img/icons8_book_shelf_48px_2.png" />
+                           </image>
+                        </ImageView>
                      </children></Pane>
                   <Pane prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #012a4a;">
                      <children>
                         <Text fx:id="stpinjam" fill="WHITE" layoutX="163.0" layoutY="79.0" strokeType="OUTSIDE" strokeWidth="0.0" style="-fx-font-size: 28;" text="0" />
                         <Text fill="WHITE" layoutX="14.0" layoutY="36.0" strokeType="OUTSIDE" strokeWidth="0.0" style="-fx-font-size: 24;" text="Dipinjam" />
+                        <ImageView layoutX="14.0" layoutY="45.0">
+                           <image>
+                              <Image url="@../img/icons8_borrow_book_48px_1.png" />
+                           </image>
+                        </ImageView>
                      </children></Pane>
                   <Pane prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #012a4a;">
                      <children>
                         <Text fx:id="stkembali" fill="WHITE" layoutX="164.0" layoutY="79.0" strokeType="OUTSIDE" strokeWidth="0.0" style="-fx-font-size: 28;" text="0" />
                         <Text fill="WHITE" layoutX="14.0" layoutY="36.0" strokeType="OUTSIDE" strokeWidth="0.0" style="-fx-font-size: 24;" text="Dikembalikan" />
+                        <ImageView layoutX="14.0" layoutY="45.0">
+                           <image>
+                              <Image url="@../img/icons8_return_book_48px_2.png" />
+                           </image>
+                        </ImageView>
                      </children></Pane>
                </children>
             </HBox>
