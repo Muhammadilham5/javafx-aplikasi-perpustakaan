@@ -17,4 +17,4 @@
 
 2.klik new > masukan nama database "perpustakaan" > klik create
 
-3.klik import > browse > javafx-aplikasi-perpustakaan-main > klik go
+3.klik import > browse > javafx-aplikasi-perpustakaan-main > perpustakaan.sql > klik go
