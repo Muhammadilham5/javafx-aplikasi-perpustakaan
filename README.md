@@ -10,7 +10,7 @@
 
 2.ekstrak file
 
-3.buka file javafx-aplikasi-perpustakaan-main > javafx-aplikasi-perpustakaan-main > AplikasiPerpustakaan > dist > AplikasiPerpustakaan.jar
+3.buka file javafx-aplikasi-perpustakaan-main > AplikasiPerpustakaan > AplikasiPerpustakaan.jar
 (jalankan database terlebih dulu)
 ## database
 1.ketik localhost/phpmyadmin dibrowser
